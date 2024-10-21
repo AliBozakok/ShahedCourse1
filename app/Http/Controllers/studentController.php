@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\studentRequest;
 use App\Models\Student;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,16 +23,10 @@ class studentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(studentRequest $request)
     {
         try{
-        $input= $request->validate([
-            'name'=> 'required | string',
-            'no'=>'required',
-            'email' => 'required | email',
-            'password'=> 'required',
-            'imgUrl'=> 'nullable | mimes:png,jpg'
-        ]);
+        $input= $request->validated();
         Student::create($input);
         return response()->json(['message'=>'creating new student successfully']);
     }
@@ -54,16 +49,29 @@ class studentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(studentRequest $request, string $id)
     {
-        //
-    }
+        try{
+        $input= $request->validated();
+        $student= Student::findOrFail($id);
+        $student->update($input);
+        return response()->json(['message'=>'student is updated successfully']);
+      }
+      catch(Exception $e)
+      {
+        return response()->json(['message'=>'student updated Error'],500);
+       }
+      }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $student= Student::findOrFail($id);
+        $student->delete();
+        return response()->json(['message'=>'student is deleted successfully']);
+
     }
 }
