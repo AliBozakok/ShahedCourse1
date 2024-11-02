@@ -45,6 +45,7 @@ Route::group([
     Route::apiResource('student', studentController::class);
     Route::apiResource('course', courseController::class);
     Route::apiResource('studentCousre', studentCourseController::class);
+    Route::get('studentGrd/{id}', [studentController::class,'Grd']);
 });
 
 Route::group([

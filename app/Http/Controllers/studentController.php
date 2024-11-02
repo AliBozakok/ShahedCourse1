@@ -70,8 +70,19 @@ class studentController extends Controller
     public function destroy(string $id)
     {
         $student= Student::findOrFail($id);
-        $student->delete();
+        $student->isActive=0;
+        $student->isDismissed=1;
+        $student->save();
         return response()->json(['message'=>'student is deleted successfully']);
 
+    }
+
+    public function Grd(String $id)
+    {
+        $student= Student::findOrFail($id);
+        $student->isActive=0;
+        $student->isGraduated=1;
+        $student->save();
+        return response()->json(['message'=>'student is Graduated ']);
     }
 }
